@@ -70,7 +70,7 @@ var model = {
     jobs: [
       {
         employer: 'Infostan',
-        title: 'Internship',
+        title: 'Professional Internship',
         location: 'Belgrade, Serbia',
         dates: 'August 2017',
         description: 'Based on instructions for receiving, solving and dealing with reclamations for workers of Service for regular billing – Unified Billing System, it was necessary for certain reports to be transfered to electronic form, and then to explain the use and filling out process for those reports.'
@@ -111,18 +111,63 @@ var model = {
 var octopus = {
   getName: function() {
     return model.bio.name;
+  },
+
+  getRole: function() {
+    return model.bio.role;
+  },
+
+  getBioPic: function() {
+    return model.bio.biopic;
+  },
+
+  getMsg: function() {
+    return model.bio.welcomeMessage;
+  },
+
+  getSkills: function() {
+    return model.bio.skills.join('<br>');
+  },
+
+  getContact: function(contact) {
+    return model.bio.contacts[contact];
   }
 };
 
 var view = {
   init: function() {
     this.formattedName = HTMLheaderName.replace("%data%", octopus.getName());
+    this.formattedRole = HTMLheaderRole.replace("%data%", octopus.getRole());
+    this.formattedBioPic = HTMLbioPic.replace("%data%", octopus.getBioPic());
+    this.formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", octopus.getMsg());
+    this.formattedSkills = HTMLskills.replace("%data%", octopus.getSkills());
 
-    this.render();
+    this.formattedMobile = HTMLmobile.replace("%data%", octopus.getContact('mobile'));
+    this.formattedEmail = HTMLemail.replace("%data%", octopus.getContact('email'));
+    this.formattedGithub = HTMLgithub.replace("%data%", octopus.getContact('github'));
+    this.formattedTwitter = HTMLtwitter.replace("%data%", octopus.getContact('twitter'));
+    this.formattedLocation = HTMLlocation.replace("%data%", octopus.getContact('location'));
+
+    this.renderHeader();
+    this.renderContact();
   },
   
-  render: function() {
-    $('#header').append(this.formattedName);
+  renderHeader: function() {
+    $('#header').prepend(this.formattedName);
+    $(this.formattedRole).insertAfter('#name');
+    $('#header').append(this.formattedBioPic);
+    $('#header').append(this.formattedWelcomeMsg);
+    $('#header').append(HTMLskillsStart);
+    $('#skills').append(this.formattedSkills);
+
+  },
+
+  renderContact: function() {
+    $('#topContacts').append(this.formattedMobile);
+    $('#topContacts').append(this.formattedEmail);
+    $('#topContacts').append(this.formattedGithub);
+    $('#topContacts').append(this.formattedTwitter);
+    $('#topContacts').append(this.formattedLocation);
   }
 };
 

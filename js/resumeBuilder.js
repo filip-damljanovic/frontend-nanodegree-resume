@@ -14,9 +14,9 @@ var model = {
     },
     welcomeMessage: 'Welcome!',
     skills: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'git', 'C#', 'SQL'],
-    biopic: 'https://www.jack969.com/wp-content/uploads/sites/13/2017/07/The-Queen-biopic-is-finally-happening-1024x576.jpg',
+    biopic: 'images/fry.jpg',
     display: function() {
-      return false;
+      $('#header').style.display = "block";
     }
   },
 
@@ -28,7 +28,7 @@ var model = {
         degree: 'II degree',
         majors: ['Serbian', 'Mathematics'],
         dates: 'September 1999- June 2007',
-        url: 'petaosnovna.com'
+        url: 'http://petaosnovna.com'
       },
       {
         name: 'Tehnicka skola, Uzice',
@@ -36,7 +36,7 @@ var model = {
         degree: 'III degree',
         majors: ['Serbian', 'Mathematics'],
         dates: 'September 2007- June 2011',
-        url: 'www.tehnickaue.edu.rs'
+        url: 'http://www.tehnickaue.edu.rs'
       },
       {
         name: 'Fakultet organizacionih nauka',
@@ -44,7 +44,7 @@ var model = {
         degree: 'IV degree',
         majors: ['Game theory'],
         dates: 'October 2011- July 2017',
-        url: 'www.fon.bg.ac.rs'
+        url: 'http://www.fon.bg.ac.rs'
       },
     ],
     onlineCourses: [
@@ -52,17 +52,17 @@ var model = {
         title: 'JavaScript design patterns',
         school: 'Udacity',
         dates: 'February 2019- March 2019',
-        url: 'https://classroom.udacity.com/courses/'
+        url: 'https://www.udacity.com/course/javascript-design-patterns--ud989'
       },
       {
         title: 'JavaScript Intro to AJAX',
         school: 'Udacity',
         dates: 'March 2019',
-        url: 'https://classroom.udacity.com/courses/'
+        url: 'https://www.udacity.com/course/intro-to-ajax--ud110'
       }
     ],
     display: function() {
-      return false;
+      $('#education').style.display = "block";
     }
   },
 
@@ -72,12 +72,12 @@ var model = {
         employer: 'Infostan',
         title: 'Professional Internship',
         location: 'Belgrade, Serbia',
-        dates: 'August 2017',
+        dates: 'August 2015',
         description: 'Based on instructions for receiving, solving and dealing with reclamations for workers of Service for regular billing – Unified Billing System, it was necessary for certain reports to be transfered to electronic form, and then to explain the use and filling out process for those reports.'
       }
     ],
     display: function() {
-      return false;
+      $('#workExperience').style.display = "block";
     }
   },
 
@@ -98,17 +98,17 @@ var model = {
         title: 'Udacity JavaScript design patterns project- Attendance app',
         dates: 'February 2019- March 2019',
         description: 'Building attendance app, using MV* pattern.',
-        images: ['No images were used.']
+        images: ['images/attendance-app.jpg']
       },
     ],
     display: function() {
-      return false;
+      $('#projects').style.display = "block";
     }
   }
 
 };
 
-var octopus = {
+var controller = {
   getName: function() {
     return model.bio.name;
   },
@@ -129,29 +129,128 @@ var octopus = {
     return model.bio.skills.join('<br>');
   },
 
-  getContact: function(contact) {
-    return model.bio.contacts[contact];
+  getContactInfo: function() {
+    var contact = model.bio.contacts;
+    var formattedMobile = HTMLmobile.replace("%data%", contact.mobile);
+    var formattedEmail = HTMLemail.replace("%data%", contact.email);
+    var formattedGithub = HTMLgithub.replace("%data%", contact.github);
+    var formattedTwitter = HTMLtwitter.replace("%data%", contact.twitter);
+    var formattedLocation = HTMLlocation.replace("%data%", contact.location);
+
+    return formattedMobile + formattedEmail + formattedGithub + formattedTwitter + formattedLocation;
+  },
+
+  getWorkDetails: function() {
+    var jobs = model.work.jobs;
+    var formattedJobs = '';
+    for(var i = 0; i < jobs.length; i++) {
+      var job = jobs[i];
+      var formattedEmployer = HTMLworkEmployer.replace("#", "http://www.infostan.rs").replace("%data%", job.employer);
+      var formattedWorkTitle = HTMLworkTitle.replace("%data%", job.title);
+      var formattedWorkDates = HTMLworkDates.replace("%data%", job.dates);
+      var formattedWorkLocation = HTMLworkLocation.replace("%data%", job.location);
+      var formattedWorkDescription = HTMLworkDescription.replace("%data%", job.description);
+
+      formattedJobs += formattedEmployer + formattedWorkTitle + formattedWorkDates + formattedWorkLocation + formattedWorkDescription;
+    }
+    return formattedJobs;
+  },
+
+  getProjectDetails: function() {
+    var projects = model.projects.projects;
+    var formattedProjects = '';
+    for(var i = 0; i < projects.length; i++) {
+      var project = projects[i];
+      var formattedProjectTitle = HTMLprojectTitle.replace("#", "https://www.udacity.com/course/javascript-design-patterns--ud989").replace("%data%", project.title);
+      var formattedProjectDates = HTMLprojectDates.replace("%data%", project.dates);
+      var formattedProjectDescription = HTMLprojectDescription.replace("%data%", project.description);
+      var formattedProjectImages = '';
+      for(var j = 0; j < project.images.length; j++) {
+        var image = HTMLprojectImage.replace("%data%", project.images[j]);
+        formattedProjectImages += image;
+      }
+
+      formattedProjects += formattedProjectTitle + formattedProjectDates + formattedProjectDescription + formattedProjectImages;
+    }
+    return formattedProjects;
+  },
+
+  getSchoolDetails: function() {
+    var schools = model.education.schools;
+    var formattedSchools = '';
+    for(var i = 0; i < schools.length; i++) {
+      var school = schools[i];
+      var formattedSchoolName = HTMLschoolName.replace("#", school.url).replace("%data%", school.name);
+      var formattedSchoolDegree = HTMLschoolDegree.replace("%data%", school.degree);
+      var formattedSchoolDates = HTMLschoolDates.replace("%data%", school.dates);
+      var formattedSchoolLocation = HTMLschoolLocation.replace("%data%", school.location);
+      var formattedSchoolMajor = HTMLschoolMajor.replace("%data%", school.majors.join(", "));
+
+      formattedSchools += formattedSchoolName + formattedSchoolDegree + formattedSchoolDates + formattedSchoolLocation + formattedSchoolMajor;
+    }
+    return formattedSchools;
+  },
+
+  getOnlineCourses: function() {
+    var courses = model.education.onlineCourses;
+    var formattedOnlineCourses = '';
+    for(var i = 0; i < courses.length; i++) {
+      var course = courses[i];
+      var formattedCourseTitle = HTMLonlineTitle.replace("%data%", course.title);
+      var formattedCourseSchool = HTMLonlineSchool.replace("%data%", course.school);
+      var formattedCourseDates = HTMLonlineDates.replace("%data%", course.dates);
+      var formattedCourseURL = HTMLonlineURL.replace("#", course.url).replace("%data%", course.url);
+
+      formattedOnlineCourses += formattedCourseTitle + formattedCourseSchool + formattedCourseDates + formattedCourseURL;
+    }
+    return formattedOnlineCourses;
   }
 };
 
 var view = {
   init: function() {
-    this.formattedName = HTMLheaderName.replace("%data%", octopus.getName());
-    this.formattedRole = HTMLheaderRole.replace("%data%", octopus.getRole());
-    this.formattedBioPic = HTMLbioPic.replace("%data%", octopus.getBioPic());
-    this.formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", octopus.getMsg());
-    this.formattedSkills = HTMLskills.replace("%data%", octopus.getSkills());
+    this.initHeader();
+    this.initContact();
+    this.initWork();
+    this.initProjects();
+    this.initEducation();
+  },
 
-    this.formattedMobile = HTMLmobile.replace("%data%", octopus.getContact('mobile'));
-    this.formattedEmail = HTMLemail.replace("%data%", octopus.getContact('email'));
-    this.formattedGithub = HTMLgithub.replace("%data%", octopus.getContact('github'));
-    this.formattedTwitter = HTMLtwitter.replace("%data%", octopus.getContact('twitter'));
-    this.formattedLocation = HTMLlocation.replace("%data%", octopus.getContact('location'));
+  initHeader: function() {
+    this.formattedName = HTMLheaderName.replace("%data%", controller.getName());
+    this.formattedRole = HTMLheaderRole.replace("%data%", controller.getRole());
+    this.formattedBioPic = HTMLbioPic.replace("%data%", controller.getBioPic());
+    this.formattedWelcomeMsg = HTMLwelcomeMsg.replace("%data%", controller.getMsg());
+    this.formattedSkills = HTMLskills.replace("%data%", controller.getSkills());
 
     this.renderHeader();
+  },
+
+  initContact: function() {
+    this.formattedContactInfo = controller.getContactInfo();
+
     this.renderContact();
   },
-  
+
+  initWork: function() {
+    this.formattedJobs = controller.getWorkDetails();
+
+    this.renderWork();
+  },
+
+  initProjects: function() {
+    this.formattedProjects = controller.getProjectDetails();
+
+    this.renderProjects();
+  },
+
+  initEducation: function() {
+    this.formattedSchools = controller.getSchoolDetails();
+    this.formattedOnlineCourses = controller.getOnlineCourses();
+
+    this.renderEducation();
+  },
+
   renderHeader: function() {
     $('#header').prepend(this.formattedName);
     $(this.formattedRole).insertAfter('#name');
@@ -159,15 +258,40 @@ var view = {
     $('#header').append(this.formattedWelcomeMsg);
     $('#header').append(HTMLskillsStart);
     $('#skills').append(this.formattedSkills);
-
   },
 
   renderContact: function() {
-    $('#topContacts').append(this.formattedMobile);
-    $('#topContacts').append(this.formattedEmail);
-    $('#topContacts').append(this.formattedGithub);
-    $('#topContacts').append(this.formattedTwitter);
-    $('#topContacts').append(this.formattedLocation);
+    $('#topContacts').append(this.formattedContactInfo);
+  },
+
+  renderWork: function() {
+    $('#workExperience').append(HTMLworkStart);
+    $('.work-entry').append(this.formattedJobs);
+  },
+
+  renderProjects: function() {
+    $('#projects').append(HTMLprojectStart);
+    $('.project-entry').append(this.formattedProjects);
+
+    // Set width and height for project pictures
+    var imgs = $('.project-entry').children('img');
+    for(var i = 0; i < imgs.length; i++) {
+      imgs[i].setAttribute('height', '150px');
+      imgs[i].setAttribute('width', '220px');
+    }
+
+    // Set width and height for last project picture
+    imgs.last()[0].setAttribute('height', '300px');
+    imgs.last()[0].setAttribute('width', '600px');
+  },
+
+  renderEducation: function() {
+    $('#education').append(HTMLschoolStart);
+    $('.education-entry').append(this.formattedSchools);
+
+    $('.education-entry').append(HTMLonlineClasses);
+    $('.education-entry').append(this.formattedOnlineCourses);
+
   }
 };
 

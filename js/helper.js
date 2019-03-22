@@ -117,6 +117,15 @@ function initializeMap() {
     zoom: 7,
     center: {lat: 52.53075, lng: 13.3851}
   });
+
+  // create default UI with layers provided by the platform
+  var ui = H.ui.UI.createDefault(map, maptypes);
+
+  // Enable the event system on the map instance:
+  var mapEvents = new H.mapevents.MapEvents(map);
+
+  // Instantiate the default behavior, providing the mapEvents object:
+  var behavior = new H.mapevents.Behavior(mapEvents);
   /*
   locationFinder() returns an array of every location string from the JSONs
   written for bio, education, and work.
@@ -148,6 +157,31 @@ function initializeMap() {
     return locations;
   }
 
+  function bubbleInfoFinder() {
+    var info = [];
+
+    // adds the single location property from bio to the locations array
+    info.push(model.bio.contacts.location);
+
+    // iterates through school locations and appends each location to
+    // the locations array. Note that forEach is used for array iteration
+    // as described in the Udacity FEND Style Guide:
+    // https://udacity.github.io/frontend-nanodegree-styleguide/javascript.html#for-in-loop
+    model.education.schools.forEach(function(school){
+      info.push(school.name);
+    });
+
+    // iterates through work locations and appends each location to
+    // the locations array. Note that forEach is used for array iteration
+    // as described in the Udacity FEND Style Guide:
+    // https://udacity.github.io/frontend-nanodegree-styleguide/javascript.html#for-in-loop
+    model.work.jobs.forEach(function(job){
+      info.push(job.employer);
+    });
+
+    return info;
+  }
+
   /*
   pinPoster(locations) takes in the array of locations created by locationFinder()
   and fires off Google place searches for each location
@@ -165,17 +199,63 @@ function initializeMap() {
       // Define a callback function to handle data on success:
       function onResult(data) {
         var position, marker;
-        searchResult = data.Response.View[0].Result;
-        // Add a marker for each location found
-        for (i = 0;  i < searchResult.length; i++) {
-          position = {
-            lat: searchResult[i].Location.DisplayPosition.Latitude,
-            lng: searchResult[i].Location.DisplayPosition.Longitude
-          };
-          marker = new H.map.Marker(position);
-          map.addObject(marker);
-        }
-        map.setCenter({lat: position.lat, lng:position.lng});
+        searchResult = data.Response.View[0].Result[0];
+
+        position = {
+          lat: searchResult.Location.DisplayPosition.Latitude,
+          lng: searchResult.Location.DisplayPosition.Longitude
+        };
+        marker = new H.map.Marker(position);
+        map.addObject(marker);
+
+        marker.addEventListener('tap', function (evt) {
+          // event target is the marker itself, group is a parent event target
+          // for all objects that it contains
+          switch (marker.b.lat) {
+            case 43.85388:
+              var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              // read custom data
+                content: info[0]
+              });
+              // show info bubble
+              ui.addBubble(bubble);
+              break;
+            case 43.85423:
+              var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              // read custom data
+                content: info[1]
+              });
+              // show info bubble
+              ui.addBubble(bubble);
+              break;
+            case 43.85594:
+              var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              // read custom data
+                content: info[2]
+              });
+              // show info bubble
+              ui.addBubble(bubble);
+              break;
+            case 44.77271:
+              var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              // read custom data
+                content: info[3]
+              });
+              // show info bubble
+              ui.addBubble(bubble);
+              break;
+            case 44.78181:
+              var bubble =  new H.ui.InfoBubble(evt.target.getPosition(), {
+              // read custom data
+                content: info[4]
+              });
+              // show info bubble
+              ui.addBubble(bubble);
+              break;
+          }
+        }, false);
+
+        map.setCenter(position);
       }
 
       // Get an instance of the geocoding service:
@@ -192,11 +272,11 @@ function initializeMap() {
 
   // locations is an array of location strings returned from locationFinder()
   locations = locationFinder();
+  info = bubbleInfoFinder();
 
   // pinPoster(locations) creates pins on the map for each location in
   // the locations array
   pinPoster(locations);
-
 }
 
 /*

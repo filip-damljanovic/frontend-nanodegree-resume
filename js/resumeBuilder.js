@@ -10,7 +10,7 @@ var model = {
       email: 'fdamljanovic@gmail.com',
       github: 'https://github.com/filip-damljanovic',
       twitter: '@fiLip_LFC',
-      location: 'Uzice, Serbia'
+      location: 'Karadjordjeva 36, Uzice'
     },
     welcomeMessage: 'Welcome!',
     skills: ['HTML', 'CSS', 'JavaScript', 'jQuery', 'git', 'C#', 'SQL'],
@@ -23,24 +23,24 @@ var model = {
   education: {
     schools: [
       {
-        name: 'Slobodan Sekulic',
-        location: 'Uzice, Serbia',
+        name: 'Osnovna škola "Slobodan Sekulić"',
+        location: 'Ulica Norveskih interniraca 18, Uzice, Serbia',
         degree: 'II degree',
         majors: ['Serbian', 'Mathematics'],
         dates: 'September 1999- June 2007',
         url: 'http://petaosnovna.com'
       },
       {
-        name: 'Tehnicka skola, Uzice',
-        location: 'Uzice, Serbia',
+        name: 'Tehnička škola - Užice',
+        location: 'Trg Svetog Save 34, Uzice, Serbia',
         degree: 'III degree',
         majors: ['Serbian', 'Mathematics'],
         dates: 'September 2007- June 2011',
         url: 'http://www.tehnickaue.edu.rs'
       },
       {
-        name: 'Fakultet organizacionih nauka',
-        location: 'Belgrade, Serbia',
+        name: 'Fakultet organizacionih nauka u Beogradu',
+        location: 'Jove Ilica 154, Belgrade, Serbia',
         degree: 'IV degree',
         majors: ['Game theory'],
         dates: 'October 2011- July 2017',
@@ -69,9 +69,9 @@ var model = {
   work: {
     jobs: [
       {
-        employer: 'Infostan',
+        employer: 'JKP „Infostan tehnologije”',
         title: 'Professional Internship',
-        location: 'Belgrade, Serbia',
+        location: 'Danijelova 33, Belgrade, Serbia',
         dates: 'August 2015',
         description: 'Based on instructions for receiving, solving and dealing with reclamations for workers of Service for regular billing – Unified Billing System, it was necessary for certain reports to be transfered to electronic form, and then to explain the use and filling out process for those reports.'
       }
@@ -208,12 +208,15 @@ var controller = {
 };
 
 var view = {
+  // Project initialization
   init: function() {
     this.initHeader();
     this.initContact();
     this.initWork();
     this.initProjects();
     this.initEducation();
+    this.renderMap();
+    this.renderFooter();
   },
 
   initHeader: function() {
@@ -251,6 +254,7 @@ var view = {
     this.renderEducation();
   },
 
+  // Rendering
   renderHeader: function() {
     $('#header').prepend(this.formattedName);
     $(this.formattedRole).insertAfter('#name');
@@ -286,12 +290,21 @@ var view = {
   },
 
   renderEducation: function() {
+    // Render schools
     $('#education').append(HTMLschoolStart);
     $('.education-entry').append(this.formattedSchools);
 
+    // Render online classes
     $('.education-entry').append(HTMLonlineClasses);
     $('.education-entry').append(this.formattedOnlineCourses);
+  },
 
+  renderMap: function() {
+    $('#mapDiv').append(googleMap);
+  },
+
+  renderFooter: function() {
+    $('#footerContacts').append(this.formattedContactInfo);
   }
 };
 

@@ -88,17 +88,20 @@ var model = {
         dates: 'February 2019- March 2019',
         description: 'Building a cat clicker app, using MV* pattern.',
         images: [
-          'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426',
-          'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496',
-          'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
-          'https://lh3.ggpht.com/cesD31eroFxIZ4IEeXPAJkx_8i5-haU3P9LQosGNfV-GfAPUh2bE4iw4zV6Mc9XobWOR70BQh2JAP57wZlM=s0#w=640&h=480'
-        ]
+          'images/434164568_fea0ad4013_z.jpg',
+          'images/4154543904_6e2428c421_z.jpg',
+          'images/22252709_010df3379e_z.jpg',
+          'images/1413379559_412a540d29_z.jpg',
+          'images/9648464288_2516b35537_z.jpg'
+        ],
+        url: 'https://github.com/filip-damljanovic/cat-clicker-app'
       },
       {
         title: 'Udacity JavaScript design patterns project- Attendance app',
         dates: 'February 2019- March 2019',
         description: 'Building attendance app, using MV* pattern.',
-        images: ['images/attendance-app.jpg']
+        images: ['images/attendance-app.jpg'],
+        url: 'https://github.com/filip-damljanovic/school-attendance-app'
       },
     ],
     display: function() {
@@ -161,7 +164,7 @@ var controller = {
     var formattedProjects = '';
     for(var i = 0; i < projects.length; i++) {
       var project = projects[i];
-      var formattedProjectTitle = HTMLprojectTitle.replace("#", "https://www.udacity.com/course/javascript-design-patterns--ud989").replace("%data%", project.title);
+      var formattedProjectTitle = HTMLprojectTitle.replace("#", project.url).replace("%data%", project.title);
       var formattedProjectDates = HTMLprojectDates.replace("%data%", project.dates);
       var formattedProjectDescription = HTMLprojectDescription.replace("%data%", project.description);
       var formattedProjectImages = '';
@@ -196,7 +199,7 @@ var controller = {
     var formattedOnlineCourses = '';
     for(var i = 0; i < courses.length; i++) {
       var course = courses[i];
-      var formattedCourseTitle = HTMLonlineTitle.replace("%data%", course.title);
+      var formattedCourseTitle = HTMLonlineTitle.replace("%data%", course.title).replace("#", course.url);;
       var formattedCourseSchool = HTMLonlineSchool.replace("%data%", course.school);
       var formattedCourseDates = HTMLonlineDates.replace("%data%", course.dates);
       var formattedCourseURL = HTMLonlineURL.replace("#", course.url).replace("%data%", course.url);
